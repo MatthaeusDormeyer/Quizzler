@@ -4,12 +4,16 @@ function Register({ onRegister, goLogin }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !name || !password) {
-      alert("Bitte fülle alle Felder aus.");
+      setErrorMsg("Fülle bitte alle Felder aus ;)");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
       return;
     }
 
@@ -22,21 +26,27 @@ function Register({ onRegister, goLogin }) {
         body: JSON.stringify({ name, email, password }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        alert("Registrierung fehlgeschlagen: " + data.message);
+      const data = await res.json();
+
+      if (!res.ok || !data.token) {
+        setErrorMsg(data.message || "Registrierung fehlgeschlagen");
+        setShowError(true);
+        setTimeout(() => setShowError(false), 3000);
         return;
       }
 
-      onRegister({ name, email });
+      onRegister(data); // ⬅ Token an App übergeben
     } catch (err) {
-      alert("Fehler bei der Registrierung");
-      console.error(err);
+      console.error("Fehler bei der Registrierung:", err);
+      setErrorMsg("Netzwerkfehler bei der Registrierung");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
   return (
     <div style={styles.container}>
+      {showError && <div style={styles.toast}>{errorMsg}</div>}
       <h1 style={styles.title}>Quizzler</h1>
       <h2 style={styles.sub}>Registrierung</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
@@ -136,6 +146,21 @@ const styles = {
     marginBottom: "5px",
     fontWeight: "bold",
     fontSize: "1rem",
+  },
+  toast: {
+    position: "fixed",
+    top: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    backgroundColor: "#ffdddd",
+    color: "red",
+    padding: "10px 20px",
+    border: "1px solid red",
+    borderRadius: "5px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    fontFamily: "'Courier Prime', monospace",
+    zIndex: 1000,
+    animation: "fadeOut 3s forwards",
   },
 };
 

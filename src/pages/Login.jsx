@@ -3,12 +3,17 @@ import { useState } from "react";
 function Login({ onLogin, goRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Bitte gib deine E-Mail und dein Passwort ein.");
+      setErrorMsg("Bitte gib deine E-Mail und dein Passwort ein.");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
       return;
     }
 
@@ -21,22 +26,26 @@ function Login({ onLogin, goRegister }) {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        alert("Login fehlgeschlagen: " + data.message);
+      const data = await res.json();
+
+      if (!res.ok || !data.token) {
+        setLoginError(true);
+        setTimeout(() => setLoginError(false), 500);
         return;
       }
 
-      const user = await res.json();
-      onLogin(user);
+      onLogin(data); // <-- enthält den Token
     } catch (err) {
-      alert("Fehler beim Login");
-      console.error(err);
+      console.error("Fehler beim Login:", err);
+      setErrorMsg("Netzwerkfehler beim Login");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
   return (
     <div style={styles.container}>
+      {showError && <div style={styles.toast}>{errorMsg}</div>}
       <h1 style={styles.title}>Quizzler</h1>
       <h2 style={styles.sub}>Login</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
@@ -59,7 +68,14 @@ function Login({ onLogin, goRegister }) {
           />
         </div>
         <div style={styles.buttonGroup}>
-          <button type="submit" style={styles.button}>
+          <button
+            type="submit"
+            style={{
+              ...styles.button,
+              ...(loginError ? styles.errorButton : {}),
+            }}
+            className={loginError ? "shake" : ""}
+          >
             Login
           </button>
           <button type="button" style={styles.button} onClick={goRegister}>
@@ -127,6 +143,25 @@ const styles = {
     marginBottom: "5px",
     fontWeight: "bold",
     fontSize: "1rem",
+  },
+  errorButton: {
+    borderColor: "red",
+    backgroundColor: "#ffe6e6",
+  },
+  toast: {
+    position: "fixed",
+    top: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    backgroundColor: "#ffdddd",
+    color: "red",
+    padding: "10px 20px",
+    border: "1px solid red",
+    borderRadius: "5px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    fontFamily: "'Courier Prime', monospace",
+    zIndex: 1000,
+    animation: "fadeOut 3s forwards",
   },
 };
 

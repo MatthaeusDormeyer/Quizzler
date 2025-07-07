@@ -1,36 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 
 function App() {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
-  const [page, setPage] = useState("login"); // login, register, home
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUser(payload);
+        navigate("/home");
+      } catch (e) {
+        console.error("Ungültiger Token:", e);
+        localStorage.removeItem("token");
+      }
+    }
+  }, []);
 
   const handleLogin = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    setPage("home");
+    localStorage.setItem("token", userData.token);
+    const payload = JSON.parse(atob(userData.token.split(".")[1]));
+    setUser(payload);
+    navigate("/home");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
-    setPage("login");
+    navigate("/login");
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      {page === "login" && (
-        <Login onLogin={handleLogin} goRegister={() => setPage("register")} />
-      )}
-      {page === "register" && (
-        <Register onRegister={handleLogin} goLogin={() => setPage("login")} />
-      )}
-      {page === "home" && <Home user={user} onLogout={handleLogout} />}
-    </div>
+    <Routes>
+      {/* Automatische Weiterleitung */}
+      <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
+
+      <Route
+        path="/login"
+        element={
+          <Login
+            onLogin={handleLogin}
+            goRegister={() => navigate("/register")}
+          />
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <Register
+            onRegister={handleLogin}
+            goLogin={() => navigate("/login")}
+          />
+        }
+      />
+
+      <Route
+        path="/home"
+        element={
+          user ? (
+            <Home user={user} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+    </Routes>
   );
 }
 
