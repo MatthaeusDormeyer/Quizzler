@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import Result from "./pages/Result";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -38,7 +39,8 @@ function App() {
   return (
     <Routes>
       {/* Automatische Weiterleitung */}
-      <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
+      {/* <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} /> */}
+      <Route path="/" element={<Navigate to="/result" />} />
 
       <Route
         path="/login"
@@ -60,7 +62,7 @@ function App() {
         }
       />
 
-      <Route
+      {/* <Route
         path="/home"
         element={
           user ? (
@@ -69,9 +71,22 @@ function App() {
             <Navigate to="/login" />
           )
         }
+      /> */}
+
+      <Route path="/home" element={<Home />} />
+
+      <Route
+        path="/result"
+        element={
+          <Result
+            correctAnswers={4}
+            totalQuestions={6}
+            onRetry={() => navigate("/quiz")}
+            topicName="linux-basics"
+          />
+        }
       />
     </Routes>
   );
 }
-
 export default App;
