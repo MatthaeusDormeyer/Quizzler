@@ -39,8 +39,8 @@ function App() {
   return (
     <Routes>
       {/* Automatische Weiterleitung */}
-      {/* <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} /> */}
-      <Route path="/" element={<Navigate to="/result" />} />
+      <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
+      {/* <Route path="/" element={<Navigate to="/result" />} /> */}
 
       <Route
         path="/login"
@@ -62,7 +62,7 @@ function App() {
         }
       />
 
-      {/* <Route
+      <Route
         path="/home"
         element={
           user ? (
@@ -71,9 +71,9 @@ function App() {
             <Navigate to="/login" />
           )
         }
-      /> */}
+      />
 
-      <Route path="/home" element={<Home />} />
+      {/* <Route path="/home" element={<Home />} /> */}
 
       <Route
         path="/result"
