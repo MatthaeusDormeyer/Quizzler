@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import QuizOverview from "./pages/QuizOverview/QuizOverview";
 import {
   Routes,
   Route,
