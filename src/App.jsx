@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
 import {
-  Routes, Route, Navigate, useNavigate, useLocation,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
 } from "react-router-dom";
 
-import Login        from "./pages/Login";
-import Register     from "./pages/Register";
-import Home         from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
 import QuizCategory from "./pages/QuizCategory";
-import Quiz         from "./pages/Quiz";
-import Result       from "./pages/Result";
+import Quiz from "./pages/Quiz";
+import Result from "./pages/Result";
 
 export default function App() {
-  const [user, setUser]       = useState(null);
-  const [authReady, setReady] = useState(false);   
-  const navigate   = useNavigate();
-  const location   = useLocation();
-
+  const [user, setUser] = useState(null);
+  const [authReady, setReady] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -32,7 +35,7 @@ export default function App() {
         localStorage.removeItem("token");
       }
     }
-    setReady(true);           
+    setReady(true);
   }, [location.pathname, navigate]);
 
   function handleLogin({ token }) {
@@ -48,7 +51,7 @@ export default function App() {
     navigate("/login");
   }
 
-  if (!authReady) return null;          
+  if (!authReady) return null;
 
   return (
     <Routes>
@@ -60,43 +63,50 @@ export default function App() {
       <Route
         path="/login"
         element={
-          user
-            ? <Navigate to="/home" replace />
-            : <Login onLogin={handleLogin} goRegister={() => navigate("/register")} />
+          user ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <Login
+              onLogin={handleLogin}
+              goRegister={() => navigate("/register")}
+            />
+          )
         }
       />
 
       <Route
         path="/register"
         element={
-          user
-            ? <Navigate to="/home" replace />
-            : <Register onRegister={handleLogin} goLogin={() => navigate("/login")} />
+          user ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <Register
+              onRegister={handleLogin}
+              goLogin={() => navigate("/login")}
+            />
+          )
         }
       />
 
       <Route
         path="/home"
         element={
-          user ? <Home user={user} onLogout={handleLogout} />
-               : <Navigate to="/login" replace />
+          user ? (
+            <Home user={user} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
 
       <Route
         path="/quiz/:categoryId"
-        element={
-          user ? <QuizCategory />
-               : <Navigate to="/login" replace />
-        }
+        element={user ? <QuizCategory /> : <Navigate to="/login" replace />}
       />
 
       <Route
         path="/quiz/:categoryId/:topicId"
-        element={
-          user ? <Quiz />
-               : <Navigate to="/login" replace />
-        }
+        element={user ? <Quiz /> : <Navigate to="/login" replace />}
       />
 
       <Route
@@ -114,6 +124,8 @@ export default function App() {
           )
         }
       />
+
+      <Route path="/test" element={<QuizOverview />} />
     </Routes>
   );
 }

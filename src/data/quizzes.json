@@ -1,0 +1,106 @@
+[
+  {
+    "id": "navigation_and_paths",
+    "title": "Navigation and Paths",
+    "description": "Quick practice on navigating file systems...",
+    "estimatedTime": "3–5 min",
+    "commands": [
+      "cd",
+      "pwd",
+      "ls -la",
+      "absolute vs. relative paths",
+      "basename",
+      "realpath"
+    ],
+    "questionsByLevel": {
+      "Beginner": [
+        {
+          "id": "nav_sample_1",
+          "type": "template-fill",
+          "estimatedTime": "1–2 min",
+          "instruction": "Fill in the blanks with the correct Linux commands to navigate and display the current directory.",
+          "templateParts": [
+            "First use ",
+            { "blank": "b1" },
+            " to move into the desired directory, then ",
+            { "blank": "b2" },
+            " to show the current path."
+          ],
+          "answers": {
+            "b1": "cd",
+            "b2": "pwd"
+          },
+          "options": ["cd", "pwd", "ls", "touch"]
+        },
+        {
+          "id": "nav_sample_2",
+          "type": "template-fill",
+          "estimatedTime": "1–2 min",
+          "instruction": "Choose the correct command to list files including hidden ones and get the absolute path of the current directory.",
+          "templateParts": [
+            "To enter a directory, use ",
+            { "blank": "b1" },
+            ".\n",
+            "To list all files including hidden ones, use ",
+            { "blank": "b2" },
+            ".\n",
+            "To show the current directory path, use ",
+            { "blank": "b3" },
+            ".\n",
+            "To convert a relative path into an absolute one, use ",
+            { "blank": "b4" },
+            ".\n",
+            "To extract just the file name from a path, use ",
+            { "blank": "b5" },
+            "."
+          ],
+          "answers": {
+            "b1": "cd",
+            "b2": "ls -la",
+            "b3": "pwd",
+            "b4": "realpath",
+            "b5": "basename"
+          },
+          "options": [
+            "cd",
+            "ls -la",
+            "pwd",
+            "realpath",
+            "basename",
+            "touch",
+            "echo"
+          ]
+        },
+        {
+          "id": "nav_sample_3",
+          "type": "match-output",
+          "estimatedTime": "1–2 min",
+          "title": "Match output to its command",
+          "instruction": "Drag the correct output into each terminal block based on the command shown.",
+          "options": [
+            "file1.txt\nfile2.txt",
+            "/home/user",
+            "/home/user/projects/quizzler"
+          ],
+          "blocks": [
+            {
+              "id": "cmd1",
+              "prompt": "ls",
+              "correctCommand": "file1.txt\nfile2.txt"
+            },
+            {
+              "id": "cmd2",
+              "prompt": "pwd",
+              "correctCommand": "/home/user"
+            },
+            {
+              "id": "cmd3",
+              "prompt": "realpath",
+              "correctCommand": "/home/user/projects/quizzler"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
