@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import QuizOverview from "./pages/QuizOverview/QuizOverview.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -70,6 +71,8 @@ function App() {
           )
         }
       />
+
+      <Route path="/test" element={<QuizOverview />} />
     </Routes>
   );
 }
