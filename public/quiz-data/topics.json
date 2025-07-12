@@ -1,0 +1,23 @@
+[
+  {
+    "id": "navigation_and_paths",
+    "title": "Navigation and Paths",
+    "image": "/navigation_and_paths.png",
+    "preview": "A quick practice on navigating file systems, locating your position, and moving between directories using core Linux concepts. Includes 5 practical challenges.",
+    "commands": "cd, pwd, ls -la, absolute vs. relative paths"
+  },
+  {
+    "id": "file_operations",
+    "title": "File Operations",
+    "image": "/file_operations.png",
+    "preview": "A quick practice on copying, moving and deleting files, as well as creating and reading them. Includes 5 practical challenges.",
+    "commands": "cp, mv, rm, touch, cat"
+  },
+  {
+    "id": "permissions",
+    "title": "Permissions",
+    "image": "/permissions.png",
+    "preview": "A quick practice on managing file permissions and ownership. Includes 5 practical challenges.",
+    "commands": "chmod, chown, umask"
+  }
+]

@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
-import Result from "./pages/Result";
+import {
+  Routes, Route, Navigate, useNavigate, useLocation,
+} from "react-router-dom";
 
-function App() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+import Login        from "./pages/Login";
+import Register     from "./pages/Register";
+import Home         from "./pages/Home";
+import QuizCategory from "./pages/QuizCategory";
+import Quiz         from "./pages/Quiz";
+import Result       from "./pages/Result";
+
+export default function App() {
+  const [user, setUser]       = useState(null);
+  const [authReady, setReady] = useState(false);   
+  const navigate   = useNavigate();
+  const location   = useLocation();
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -15,78 +23,97 @@ function App() {
       try {
         const payload = JSON.parse(atob(token.split(".")[1]));
         setUser(payload);
-        navigate("/home");
-      } catch (e) {
-        console.error("Ungültiger Token:", e);
+
+        if (location.pathname === "/") {
+          navigate("/home", { replace: true });
+        }
+      } catch (err) {
+        console.error("Ungültiger Token:", err);
         localStorage.removeItem("token");
       }
     }
-  }, []);
+    setReady(true);           
+  }, [location.pathname, navigate]);
 
-  const handleLogin = (userData) => {
-    localStorage.setItem("token", userData.token);
-    const payload = JSON.parse(atob(userData.token.split(".")[1]));
+  function handleLogin({ token }) {
+    localStorage.setItem("token", token);
+    const payload = JSON.parse(atob(token.split(".")[1]));
     setUser(payload);
     navigate("/home");
-  };
+  }
 
-  const handleLogout = () => {
+  function handleLogout() {
     localStorage.removeItem("token");
     setUser(null);
     navigate("/login");
-  };
+  }
+
+  if (!authReady) return null;          
 
   return (
     <Routes>
-      {/* Automatische Weiterleitung */}
-      <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
-      {/* <Route path="/" element={<Navigate to="/result" />} /> */}
+      <Route
+        path="/"
+        element={<Navigate to={user ? "/home" : "/login"} replace />}
+      />
 
       <Route
         path="/login"
         element={
-          <Login
-            onLogin={handleLogin}
-            goRegister={() => navigate("/register")}
-          />
+          user
+            ? <Navigate to="/home" replace />
+            : <Login onLogin={handleLogin} goRegister={() => navigate("/register")} />
         }
       />
 
       <Route
         path="/register"
         element={
-          <Register
-            onRegister={handleLogin}
-            goLogin={() => navigate("/login")}
-          />
+          user
+            ? <Navigate to="/home" replace />
+            : <Register onRegister={handleLogin} goLogin={() => navigate("/login")} />
         }
       />
 
       <Route
         path="/home"
         element={
-          user ? (
-            <Home user={user} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/login" />
-          )
+          user ? <Home user={user} onLogout={handleLogout} />
+               : <Navigate to="/login" replace />
         }
       />
 
-      {/* <Route path="/home" element={<Home />} /> */}
+      <Route
+        path="/quiz/:categoryId"
+        element={
+          user ? <QuizCategory />
+               : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="/quiz/:categoryId/:topicId"
+        element={
+          user ? <Quiz />
+               : <Navigate to="/login" replace />
+        }
+      />
 
       <Route
         path="/result"
         element={
-          <Result
-            correctAnswers={4}
-            totalQuestions={6}
-            onRetry={() => navigate("/quiz")}
-            topicName="linux-basics"
-          />
+          user ? (
+            <Result
+              correctAnswers={4}
+              totalQuestions={6}
+              onRetry={() => navigate("/quiz")}
+              topicName="linux-basics"
+            />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
     </Routes>
   );
 }
-export default App;

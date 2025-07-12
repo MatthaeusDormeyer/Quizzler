@@ -1,155 +1,91 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate }         from "react-router-dom";
+import Sidebar                 from "../components/Sidebar";
+import Modal                   from "../components/Modal";
 
-function Home({ user, onLogout }) {
-  const [score] = useState(42); // Dummy-Score
-  const [menuOpen, setMenuOpen] = useState(false);
+export default function Home({ user, onLogout }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [quizzes,     setQuizzes    ] = useState([]);
+  const [selQuiz,     setSelQuiz    ] = useState(null);
+  const [score]                      = useState(42);   // TODO: echten Score holen
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("/quiz-data/topics.json")
+      .then(r => r.json())
+      .then(setQuizzes)
+      .catch(err =>
+        console.error("Quiz-JSON konnte nicht geladen werden:", err)
+      );
+  }, []);
+
+  function handleStart() {
+    if (!selQuiz) return;
+    setSelQuiz(null);
+    navigate(`/quiz/${selQuiz.id}`);
+  }
 
   return (
-    <div style={styles.wrapper}>
-      {/* Sidebar */}
-      <div style={{ ...styles.sidebar, left: menuOpen ? 0 : "-240px" }}>
-        <h2 style={styles.logo}>Quizzler</h2>
-        <nav style={styles.nav}>
-          <button style={styles.navItem} onClick={() => setMenuOpen(false)}>
-            Home
-          </button>
-          <button style={styles.navItem} onClick={() => setMenuOpen(false)}>
-            Account
-          </button>
-        </nav>
-        <button style={styles.logout} onClick={onLogout}>
-          Logout
-        </button>
-      </div>
-
-      {/* Burger Button */}
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        style={{
-          ...styles.burger,
-          left: menuOpen ? "220px" : "20px",
-          backgroundColor: menuOpen ? "#2e7d32" : "#4caf50",
-          color: "white",
-          transition: "left 0.3s ease, background-color 0.3s ease",
+    <div style={S.wrapper}>
+      <Sidebar
+        open   ={sidebarOpen}
+        toggle ={() => setSidebarOpen(o => !o)}
+        onLogout={() => {
+          localStorage.removeItem("token");
+          onLogout?.();
         }}
-      >
-        {menuOpen ? "✕" : "☰"}
-      </button>
+      />
 
-      {/* Main Content */}
-      <div style={{ ...styles.main, marginLeft: menuOpen ? "240px" : "0" }}>
-        <h2>Willkommen, {user?.name}!</h2>
-        <p>
-          Deine Punktzahl beträgt gerade <strong>{score}</strong>.
+      <main style={{ ...S.main, marginLeft: sidebarOpen ? 240 : 0 }}>
+        <h2 style={S.h2}>Willkommen, {user?.name}!</h2>
+        <p  style={S.lead}>
+          Deine Punktzahl beträgt derzeit <strong>{score}</strong>.<br/>
+          Wähle einen Quiz, um loszulegen
         </p>
 
-        <div style={styles.quizGrid}>
-          {["Allgemeinwissen", "Informatik", "Sport"].map((title, i) => (
-            <div key={i} style={styles.quizCard}>
-              <h3>{title}</h3>
-              <p>Teste dein Wissen im Bereich {title}!</p>
-              <button
-                style={styles.quizButton}
-                onClick={() => alert(`Navigiere zu /quiz/${i}`)}
-              >
-                Quiz starten
+        <div style={S.grid}>
+          {quizzes.map(q => (
+            <div key={q.id} style={S.card}>
+              <img src={q.image} alt={q.title} style={S.img} />
+              <h3>{q.title}</h3>
+
+              <button style={S.btn} onClick={() => setSelQuiz(q)}>
+                Quiz wählen
               </button>
             </div>
           ))}
         </div>
-      </div>
+      </main>
+
+      {selQuiz && (
+        <Modal
+          topic   ={selQuiz}
+          onClose ={() => setSelQuiz(null)}
+          onStart ={handleStart}
+        />
+      )}
     </div>
   );
 }
 
-const styles = {
-  wrapper: {
-    display: "flex",
-    minHeight: "100vh",
-    fontFamily: "'Courier Prime', monospace",
-  },
-  burger: {
-    position: "fixed",
-    top: "20px",
-    zIndex: 1001,
-    border: "none",
-    fontSize: "1.5rem",
-    padding: "10px 14px",
-    cursor: "pointer",
-    borderRadius: "8px 8px 8px 8px",
-  },
-  sidebar: {
-    position: "fixed",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: "240px",
-    backgroundColor: "#2e7d32",
-    color: "#fff",
-    padding: "20px",
-    transition: "left 0.3s ease-in-out",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  logo: {
-    fontSize: "1.5rem",
-    marginBottom: "30px",
-  },
-  nav: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-  },
-  navItem: {
-    background: "none",
-    border: "none",
-    color: "#fff",
-    fontSize: "1rem",
-    textAlign: "left",
-    cursor: "pointer",
-    padding: "10px",
-    borderRadius: "5px",
-    transition: "background 0.2s",
-  },
-  logout: {
-    background: "#c62828",
-    border: "none",
-    padding: "10px",
-    color: "#fff",
-    fontWeight: "bold",
-    cursor: "pointer",
-    borderRadius: "5px",
-    marginTop: "auto", // ⬅️ wichtig: nach unten drücken
-  },
-  main: {
-    flex: 1,
-    padding: "40px",
-    transition: "margin-left 0.3s ease-in-out",
-    width: "100%",
-  },
-  quizGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-    marginTop: "30px",
-  },
-  quizCard: {
-    border: "2px solid green",
-    borderRadius: "10px",
-    padding: "20px",
-    textAlign: "center",
-    backgroundColor: "#f9f9f9",
-  },
-  quizButton: {
-    marginTop: "10px",
-    padding: "10px 20px",
-    backgroundColor: "#4caf50",
-    color: "#fff",
-    border: "none",
-    cursor: "pointer",
-    borderRadius: "5px",
-  },
-};
+const S = {
+  wrapper:{ display:"flex", minHeight:"100vh",
+            fontFamily:"'Courier Prime', monospace" },
 
-export default Home;
+  main:   { flex:1, padding:40, transition:"margin-left .3s ease", width:"100%" },
+
+  h2  : { marginTop:20, marginBottom:12, textAlign:"left" },
+  lead: { marginBottom:24, textAlign:"left" },
+
+  grid: { display:"grid",
+          gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
+          gap:20, marginTop:10, justifyContent:"start" },
+
+  card: { border:"2px solid green", borderRadius:10,
+          padding:20, background:"#f9f9f9", textAlign:"center" },
+
+  img : { width:90, marginBottom:-20, objectFit:"contain" },
+
+  btn : { padding:"10px 20px", background:"#4caf50",
+          color:"#fff", border:"none", borderRadius:5, cursor:"pointer" }
+}
