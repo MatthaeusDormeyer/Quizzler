@@ -1,0 +1,168 @@
+import { useState } from "react";
+
+function Login({ onLogin, goRegister }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showError, setShowError] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setErrorMsg("Bitte gib deine E-Mail und dein Passwort ein.");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:3001/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.token) {
+        setLoginError(true);
+        setTimeout(() => setLoginError(false), 500);
+        return;
+      }
+
+      onLogin(data); // <-- enthält den Token
+    } catch (err) {
+      console.error("Fehler beim Login:", err);
+      setErrorMsg("Netzwerkfehler beim Login");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      {showError && <div style={styles.toast}>{errorMsg}</div>}
+      <h1 style={styles.title}>Quizzler</h1>
+      <h2 style={styles.sub}>Login</h2>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Email:</label>
+          <input
+            type="email"
+            value={email}
+            style={styles.input}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Passwort:</label>
+          <input
+            type="password"
+            value={password}
+            style={styles.input}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div style={styles.buttonGroup}>
+          <button
+            type="submit"
+            style={{
+              ...styles.button,
+              ...(loginError ? styles.errorButton : {}),
+            }}
+            className={loginError ? "shake" : ""}
+          >
+            Login
+          </button>
+          <button type="button" style={styles.button} onClick={goRegister}>
+            Registrieren
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+    fontFamily: "'Courier Prime', monospace",
+    textAlign: "center",
+    marginTop: "50px",
+  },
+  title: {
+    backgroundColor: "white",
+    color: "black",
+    display: "inline-block",
+    padding: "10px 20px",
+    fontSize: "2rem",
+    borderRadius: "5px",
+  },
+  sub: {
+    marginTop: "20px",
+    color: "black",
+  },
+  form: {
+    display: "inline-block",
+    marginTop: "20px",
+    textAlign: "left",
+  },
+  inputGroup: {
+    marginBottom: "15px",
+    color: "black",
+  },
+  input: {
+    width: "250px",
+    padding: "8px",
+    border: "2px solid green",
+    borderRadius: "4px",
+    fontSize: "1rem",
+    fontFamily: "'Courier Prime', monospace",
+  },
+  buttonGroup: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "10px",
+    marginTop: "20px",
+  },
+  button: {
+    backgroundColor: "white",
+    border: "2px solid green",
+    padding: "8px 16px",
+    fontFamily: "'Courier Prime', monospace",
+    cursor: "pointer",
+    fontSize: "1rem",
+    width: "250px", // Gleiche Breite wie Eingabefelder
+  },
+  label: {
+    display: "block",
+    marginBottom: "5px",
+    fontWeight: "bold",
+    fontSize: "1rem",
+  },
+  errorButton: {
+    borderColor: "red",
+    backgroundColor: "#ffe6e6",
+  },
+  toast: {
+    position: "fixed",
+    top: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    backgroundColor: "#ffdddd",
+    color: "red",
+    padding: "10px 20px",
+    border: "1px solid red",
+    borderRadius: "5px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    fontFamily: "'Courier Prime', monospace",
+    zIndex: 1000,
+    animation: "fadeOut 3s forwards",
+  },
+};
+
+export default Login;
