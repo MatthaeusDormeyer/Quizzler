@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import QuizOverview from "./pages/QuizOverview/QuizOverview";
 import {
   Routes,
   Route,
@@ -11,9 +10,8 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import QuizCategory from "./pages/QuizCategory";
-import Quiz from "./pages/Quiz";
-import Result from "./pages/Result";
+import QuizOverview from "./pages/QuizOverview/QuizOverview";
+import ResultWrapper from "./pages/ResultWrapper";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -21,13 +19,14 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const DEV_MODE = true;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split(".")[1]));
         setUser(payload);
-
         if (location.pathname === "/") {
           navigate("/home", { replace: true });
         }
@@ -92,7 +91,7 @@ export default function App() {
       <Route
         path="/home"
         element={
-          user ? (
+          user || DEV_MODE ? (
             <Home user={user} onLogout={handleLogout} />
           ) : (
             <Navigate to="/login" replace />
@@ -101,32 +100,22 @@ export default function App() {
       />
 
       <Route
-        path="/quiz/:categoryId"
-        element={user ? <QuizCategory /> : <Navigate to="/login" replace />}
-      />
-
-      <Route
-        path="/quiz/:categoryId/:topicId"
-        element={user ? <Quiz /> : <Navigate to="/login" replace />}
+        path="/quiz/:topicId"
+        element={
+          user || DEV_MODE ? <QuizOverview /> : <Navigate to="/login" replace />
+        }
       />
 
       <Route
         path="/result"
         element={
-          user ? (
-            <Result
-              correctAnswers={4}
-              totalQuestions={6}
-              onRetry={() => navigate("/quiz")}
-              topicName="linux-basics"
-            />
+          user || DEV_MODE ? (
+            <ResultWrapper />
           ) : (
             <Navigate to="/login" replace />
           )
         }
       />
-
-      <Route path="/test" element={<QuizOverview />} />
     </Routes>
   );
 }

@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Result = ({ correctAnswers, totalQuestions, topicName, onRetry }) => {
+const Result = ({
+  correctAnswers,
+  totalQuestions,
+  topicName,
+  onRetry,
+  elapsedSeconds,
+}) => {
   const stars = Math.round((correctAnswers / totalQuestions) * 5);
   const navigate = useNavigate();
 
@@ -31,7 +37,8 @@ const Result = ({ correctAnswers, totalQuestions, topicName, onRetry }) => {
           </span>
         </p>
 
-        <p className="result-line">Time:</p>
+        <p className="result-line">Time: {formatTime(elapsedSeconds)}</p>
+
         <p className="result-line">Difficulty:</p>
         <p className="result-line">Attempts:</p>
         <p className="result-line">
@@ -40,11 +47,19 @@ const Result = ({ correctAnswers, totalQuestions, topicName, onRetry }) => {
         <div className="result-buttons">
           <button onClick={onRetry}>Try Again</button>
           <button onClick={() => navigate("/home")}>Home</button>
-          <button onclick={() => navigate("/quiz/2")}>Next</button>
+          <button onClick={() => navigate("/quiz/2")}>Next</button>
         </div>
       </div>
     </div>
   );
 };
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const s = (seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
 
 export default Result;

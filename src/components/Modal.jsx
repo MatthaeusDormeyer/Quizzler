@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import "./Modal.css";
+import { useNavigate } from "react-router-dom";
 
-export default function Modal({ topic, onClose, onStart }) {
+export default function Modal({ topic, onClose }) {
   const [level, setLevel] = useState("beginner");
-  if (!topic) return null;
+  const navigate = useNavigate();
+
+  const handleStart = () => {
+    navigate(`/quiz/${topic.id}?level=${level}`);
+
+    onClose();
+  };
 
   return (
     <div className="overlay">
       <div className="window">
         <div className="header">
           <span className="title">{topic.title}</span>
-          <button className="close" onClick={onClose}>×</button>
+          <button className="close" onClick={onClose}>
+            ×
+          </button>
         </div>
         <div className="body">
           <p className="paragraph">
@@ -23,7 +32,7 @@ export default function Modal({ topic, onClose, onStart }) {
             <strong>📋 Difficulty:</strong>
           </p>
           <div className="levelRow">
-            {["beginner", "intermediate", "advanced"].map(lvl => (
+            {["beginner", "intermediate", "advanced"].map((lvl) => (
               <label key={lvl} className="levelLabel">
                 <input
                   type="radio"
@@ -41,10 +50,13 @@ export default function Modal({ topic, onClose, onStart }) {
             {"★".repeat(topic.stars) + "☆".repeat(5 - topic.stars)}
           </p>
           <p className="stats">
-            Last attempt: {topic.lastAttempt || "—"} | Time: {topic.time || "—"} | Attempts: {topic.attempts}
+            Last attempt: {topic.lastAttempt || "—"} | Time: {topic.time || "—"}{" "}
+            | Attempts: {topic.attempts}
           </p>
         </div>
-        <button className="start" onClick={onStart}>START</button>
+        <button className="start" onClick={handleStart}>
+          START
+        </button>
       </div>
     </div>
   );

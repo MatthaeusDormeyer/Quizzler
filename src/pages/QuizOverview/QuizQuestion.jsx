@@ -2,22 +2,47 @@ import React, { useState, useEffect } from "react";
 import { DndContext } from "@dnd-kit/core";
 import { OptionCard, DropZone } from "./DragComponents";
 
-function FillInTheBlankQuestion({ question, onNext, onBack, isFirst }) {
-  const [userAnswers, setUserAnswers] = useState({});
+function FillInTheBlankQuestion({
+  question,
+  onNext,
+  onBack,
+  index,
+  isFirst,
+  savedState,
+  setQuestionState,
+}) {
+  const [userAnswers, setUserAnswers] = useState(savedState?.userAnswers || {});
   const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(
+    savedState?.showFeedback || false
+  );
+  const [submitted, setSubmitted] = useState(savedState?.submitted || false);
+  const [isCorrect, setIsCorrect] = useState(savedState?.isCorrect || false);
 
   useEffect(() => {
-    setUserAnswers({});
-    setShowFeedback(false);
-    setSubmitted(false);
-    setIsCorrect(false);
-
-    const shuffled = [...question.options].sort(() => Math.random() - 0.5);
-    setShuffledOptions(shuffled);
+    if (
+      !savedState ||
+      !savedState.shuffledOptions ||
+      savedState.shuffledOptions.length === 0
+    ) {
+      const shuffled = [...question.options].sort(() => Math.random() - 0.5);
+      setShuffledOptions(shuffled);
+      setUserAnswers({});
+      setSubmitted(false);
+      setShowFeedback(false);
+      setIsCorrect(false);
+    } else {
+      setUserAnswers(savedState.userAnswers || {});
+      setSubmitted(savedState.submitted || false);
+      setShowFeedback(savedState.showFeedback || false);
+      setIsCorrect(savedState.isCorrect || false);
+      setShuffledOptions(savedState.shuffledOptions);
+    }
   }, [question]);
+
+  function shuffle(array) {
+    return [...array].sort(() => Math.random() - 0.5);
+  }
 
   const handleDrop = (event) => {
     if (submitted) return;
@@ -93,12 +118,21 @@ function FillInTheBlankQuestion({ question, onNext, onBack, isFirst }) {
 
   const handleSubmit = () => {
     if (!submitted) {
-      setShowFeedback(true);
-      setSubmitted(true);
       const correct = Object.keys(question.answers).every(
         (key) => question.answers[key] === userAnswers[key]
       );
+
+      setShowFeedback(true);
+      setSubmitted(true);
       setIsCorrect(correct);
+
+      setQuestionState({
+        userAnswers,
+        submitted: true,
+        showFeedback: true,
+        isCorrect: correct,
+        shuffledOptions,
+      });
     } else {
       onNext?.();
     }
