@@ -6,12 +6,17 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const SECRET = "mein-geheimes-passwort"; // später in .env-Datei auslagern
 
+const Result = require("./models/Result");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // 🔗 MongoDB-Verbindung
-mongoose.connect("mongodb+srv://md:1234@quizcluster.epxzuwc.mongodb.net/sample_mflix?retryWrites=true&w=majority")
+mongoose
+  .connect(
+    "mongodb+srv://md:1234@quizcluster.epxzuwc.mongodb.net/sample_mflix?retryWrites=true&w=majority"
+  )
   .then(() => console.log("✅ MongoDB verbunden"))
   .catch((err) => console.error("❌ MongoDB-Verbindungsfehler:", err));
 
@@ -20,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
-  salt: { type: String, required: true }
+  salt: { type: String, required: true },
 });
 const User = mongoose.model("User", UserSchema);
 
@@ -30,7 +35,10 @@ function generateSalt(length = 16) {
 }
 
 function hashPassword(password, salt) {
-  return crypto.createHash("sha256").update(password + salt).digest("hex");
+  return crypto
+    .createHash("sha256")
+    .update(password + salt)
+    .digest("hex");
 }
 
 // 📝 Registrierung
@@ -39,7 +47,9 @@ app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "Alle Felder sind erforderlich." });
+      return res
+        .status(400)
+        .json({ message: "Alle Felder sind erforderlich." });
     }
 
     const existing = await User.findOne({ email });
@@ -70,7 +80,9 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "E-Mail und Passwort erforderlich." });
+      return res
+        .status(400)
+        .json({ message: "E-Mail und Passwort erforderlich." });
     }
 
     const user = await User.findOne({ email });
@@ -84,11 +96,9 @@ app.post("/login", async (req, res) => {
     }
 
     // ✅ JWT erstellen
-    const token = jwt.sign(
-      { name: user.name, email: user.email },
-      SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ name: user.name, email: user.email }, SECRET, {
+      expiresIn: "1h",
+    });
 
     // ✅ Token senden
     res.status(200).json({ token });
@@ -98,6 +108,43 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//Save Results
+app.post("/save-result", async (req, res) => {
+  const {
+    email,
+    topic,
+    stars,
+    correctAnswers,
+    totalQuestions,
+    elapsedSeconds,
+    badge,
+  } = req.body;
+
+  if (!email || !topic) {
+    return res
+      .status(400)
+      .json({ error: "Email und Thema sind erforderlich." });
+  }
+
+  try {
+    const result = new Result({
+      email,
+      topic,
+      stars,
+      correctAnswers,
+      totalQuestions,
+      elapsedSeconds,
+      badge,
+    });
+
+    await result.save();
+
+    res.status(200).json({ success: true, saved: result });
+  } catch (err) {
+    console.error("❌ Fehler beim Speichern:", err);
+    res.status(500).json({ error: "Interner Serverfehler" });
+  }
+});
 
 // 🚀 Server starten
 app.listen(3001, () => {

@@ -12,12 +12,52 @@ const Result = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (topicName) {
-      const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
-      progress[topicName] = stars;
-      localStorage.setItem("quizProgress", JSON.stringify(progress));
+    if (!topicName) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("Kein Token vorhanden - Ergebnis wird nicht gespeichert.");
+      return;
     }
-  }, [stars, topicName]);
+
+    let email;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      email = payload.email;
+    } catch (err) {
+      console.error("Ungültiger Token:", err);
+      return;
+    }
+
+    const resultData = {
+      email,
+      topic: topicName,
+      stars,
+      correctAnswers,
+      totalQuestions,
+      elapsedSeconds,
+      badge: "Fast Finisher",
+    };
+
+    fetch("http://localhost:3001/save-result", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(resultData),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Fehler beim Speichern");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("✅ Ergebnis gespeichert:", data);
+      })
+      .catch((err) => {
+        console.error("Fehler beim Speichern des Ergebnisses:", err);
+      });
+  }, [stars, topicName, correctAnswers, totalQuestions, elapsedSeconds]);
 
   return (
     <div>
