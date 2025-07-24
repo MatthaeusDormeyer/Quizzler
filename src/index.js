@@ -74,6 +74,22 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.get("/all-results", async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email erforderlich." });
+  }
+
+  try {
+    const results = await Result.find({ email }).sort({ createdAt: -1 });
+    res.json(results);
+  } catch (err) {
+    console.error("❌ Fehler bei /all-results:", err);
+    res.status(500).json({ error: "Interner Serverfehler." });
+  }
+});
+
 // 🔐 Login
 app.post("/login", async (req, res) => {
   try {
@@ -107,6 +123,41 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Serverfehler bei Login." });
   }
 });
+
+// Beste Ergebnisse pro Thema für einen User
+app.get("/best-results", async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email erforderlich." });
+  }
+
+  try {
+    const bestResults = await Result.aggregate([
+      { $match: { email } },
+      { $sort: { stars: -1, createdAt: 1 } }, // beste zuerst
+      {
+        $group: {
+          _id: "$topic",
+          stars: { $first: "$stars" },
+        },
+      },
+    ]);
+
+    // Als Objekt zurückgeben: { "Navigation and Paths": 3, ... }
+    const formatted = {};
+    bestResults.forEach((entry) => {
+      formatted[entry._id] = entry.stars;
+    });
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("❌ Fehler bei /best-results:", err);
+    res.status(500).json({ error: "Interner Serverfehler." });
+  }
+});
+
+
 
 //Save Results
 app.post("/save-result", async (req, res) => {
