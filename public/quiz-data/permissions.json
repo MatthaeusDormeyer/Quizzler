@@ -1,0 +1,363 @@
+{
+  "id": "permissions",
+  "title": "Permissions",
+  "image": "/permissions.png",
+  "preview": "A quick practice on managing file permissions and ownership. Includes 5 practical challenges.",
+  "commands": "chmod, chown, umask",
+  "questionsByLevel": {
+    "Beginner": [
+      {
+        "id": "perm_b1",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Grant execute permission to the owner of `script.sh`, then display its permissions.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to add execute for the owner.\nThen use ",
+          { "blank": "b2" },
+          " to show the permissions."
+        ],
+        "answers": {
+          "b1": "chmod u+x script.sh",
+          "b2": "ls -l script.sh"
+        },
+        "options": [
+          "chmod u+x script.sh",
+          "chmod +x script.sh",
+          "ls -l script.sh",
+          "stat script.sh"
+        ]
+      },
+      {
+        "id": "perm_b2",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Remove write permission for others on `data.txt` and then verify.",
+        "templateParts": [
+          "Run ",
+          { "blank": "b1" },
+          " to remove write for others.\nThen run ",
+          { "blank": "b2" },
+          " to verify."
+        ],
+        "answers": {
+          "b1": "chmod o-w data.txt",
+          "b2": "ls -l data.txt"
+        },
+        "options": [
+          "chmod o-w data.txt",
+          "chmod g-w data.txt",
+          "ls -l data.txt",
+          "stat data.txt"
+        ]
+      },
+      {
+        "id": "perm_b3",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Change the owner of `file.log` to user `alice`, then list details.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to change owner.\nThen use ",
+          { "blank": "b2" },
+          " to display details."
+        ],
+        "answers": {
+          "b1": "chown alice file.log",
+          "b2": "ls -l file.log"
+        },
+        "options": [
+          "chown alice file.log",
+          "chown alice: file.log",
+          "ls -l file.log",
+          "stat file.log"
+        ]
+      },
+      {
+        "id": "perm_mo_b1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "-rwxr--r-- 1 root root 0 Jan 1 00:00 script.sh",
+          "alice alice file.log"
+        ],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "chmod u+x script.sh && ls -l script.sh",
+            "output": "",
+            "correctCommand": "-rwxr--r-- 1 root root 0 Jan 1 00:00 script.sh"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "chown alice file.log && ls -l file.log",
+            "output": "",
+            "correctCommand": "alice alice file.log"
+          }
+        ]
+      },
+      {
+        "id": "perm_mo_b2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "---------- 1 bob bob 0 Jan 1 00:00 data.txt",
+          "umask: 0022"
+        ],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "chmod o-w data.txt && ls -l data.txt",
+            "output": "",
+            "correctCommand": "---------- 1 bob bob 0 Jan 1 00:00 data.txt"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "umask",
+            "output": "",
+            "correctCommand": "umask: 0022"
+          }
+        ]
+      }
+    ],
+    "Intermediate": [
+      {
+        "id": "perm_i1",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Set the default umask to `027`, then verify it.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to set the mask.\nThen use ",
+          { "blank": "b2" },
+          " to display it."
+        ],
+        "answers": {
+          "b1": "umask 027",
+          "b2": "umask"
+        },
+        "options": [
+          "umask 027",
+          "umask 022",
+          "chmod 027 file.txt",
+          "umask"
+        ]
+      },
+      {
+        "id": "perm_i2",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Grant group read/write and remove all others’ permissions on `report.pdf`.",
+        "templateParts": [
+          "Run ",
+          { "blank": "b1" },
+          " to apply."
+        ],
+        "answers": {
+          "b1": "chmod g+rw,o-rwx report.pdf"
+        },
+        "options": [
+          "chmod g+rw,o-rwx report.pdf",
+          "chmod 640 report.pdf",
+          "chmod 664 report.pdf",
+          "chmod u+rw report.pdf"
+        ]
+      },
+      {
+        "id": "perm_i3",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Change owner to `bob` and group to `devs` on `app.sh` in one command.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to update both."
+        ],
+        "answers": {
+          "b1": "chown bob:devs app.sh"
+        },
+        "options": [
+          "chown bob:devs app.sh",
+          "chown devs:bob app.sh",
+          "chgrp devs app.sh",
+          "chown bob app.sh"
+        ]
+      },
+      {
+        "id": "perm_mo_i1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "-rw-rw---- 1 alice devs 0 Jan 1 00:00 report.pdf",
+          "027"
+        ],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "chmod g+rw,o-rwx report.pdf && ls -l report.pdf",
+            "output": "",
+            "correctCommand": "-rw-rw---- 1 alice devs 0 Jan 1 00:00 report.pdf"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "umask",
+            "output": "",
+            "correctCommand": "027"
+          }
+        ]
+      },
+      {
+        "id": "perm_mo_i2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "drwxr-sr-x 2 alice devs 4096 Jan 1 00:00 shared/",
+          "-rwx------ 1 alice devs 0 Jan 1 00:00 app.sh"
+        ],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "chmod g+s shared/ && ls -ld shared/",
+            "output": "",
+            "correctCommand": "drwxr-sr-x 2 alice devs 4096 Jan 1 00:00 shared/"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "chmod 700 app.sh && ls -l app.sh",
+            "output": "",
+            "correctCommand": "-rwx------ 1 alice devs 0 Jan 1 00:00 app.sh"
+          }
+        ]
+      }
+    ],
+    "Advanced": [
+      {
+        "id": "perm_a1",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Recursively set permissions on `project/` so only the owner has full access.",
+        "templateParts": [
+          "Run ",
+          { "blank": "b1" },
+          " to apply recursively."
+        ],
+        "answers": {
+          "b1": "chmod -R 700 project/"
+        },
+        "options": [
+          "chmod -R 700 project/",
+          "chmod -R u+rwx project/",
+          "chmod -R 755 project/",
+          "chmod -R 750 project/"
+        ]
+      },
+      {
+        "id": "perm_a2",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Set the setuid bit on the executable `program` and verify it.",
+        "templateParts": [
+          "First run ",
+          { "blank": "b1" },
+          " to set the bit.\nThen run ",
+          { "blank": "b2" },
+          " to verify."
+        ],
+        "answers": {
+          "b1": "chmod u+s program",
+          "b2": "ls -l program"
+        },
+        "options": [
+          "chmod u+s program",
+          "chmod +s program",
+          "ls -l program",
+          "stat program"
+        ]
+      },
+      {
+        "id": "perm_a3",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Set the setgid bit on `shared/` so new files inherit its group and then show its mode.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " then ",
+          { "blank": "b2" },
+          "."
+        ],
+        "answers": {
+          "b1": "chmod g+s shared/",
+          "b2": "ls -ld shared/"
+        },
+        "options": [
+          "chmod g+s shared/",
+          "chmod +s shared/",
+          "ls -ld shared/",
+          "stat shared/"
+        ]
+      },
+      {
+        "id": "perm_mo_a1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "-r-sr-xr-x 1 root root 0 Jan 1 00:00 program",
+          "drwxr-sr-x 2 root root 4096 Jan 1 00:00 shared/"
+        ],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "chmod u+s program && ls -l program",
+            "output": "",
+            "correctCommand": "-r-sr-xr-x 1 root root 0 Jan 1 00:00 program"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "chmod g+s shared/ && ls -ld shared/",
+            "output": "",
+            "correctCommand": "drwxr-sr-x 2 root root 4096 Jan 1 00:00 shared/"
+          }
+        ]
+      },
+      {
+        "id": "perm_mo_a2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s output into the matching terminal.",
+        "options": [
+          "root:root secure.txt",
+          "027"
+        ],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "chown root:root secure.txt && ls -l secure.txt",
+            "output": "",
+            "correctCommand": "root:root secure.txt"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "umask",
+            "output": "",
+            "correctCommand": "027"
+          }
+        ]
+      }
+    ]
+  }
+}

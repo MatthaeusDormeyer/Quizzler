@@ -1,0 +1,333 @@
+{
+  "id": "file_operations",
+  "title": "File Operations",
+  "image": "/file_operations.png",
+  "preview": "A quick practice on copying, moving and deleting files, as well as creating and reading them. Includes 5 practical challenges.",
+  "commands": "cp, mv, rm, touch, cat",
+  "questionsByLevel": {
+    "Beginner": [
+      {
+        "id": "file_b1",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Initialize your workspace: create a new file called `notes.txt`, then show all files in the directory.",
+        "templateParts": [
+          "Step 1: create the file with ",
+          { "blank": "b1" },
+          ".\nStep 2: list files with ",
+          { "blank": "b2" },
+          "."
+        ],
+        "answers": { "b1": "touch notes.txt", "b2": "ls" },
+        "options": ["touch notes.txt", "ls", "cp", "cat"]
+      },
+      {
+        "id": "file_b2",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Back up your notes: copy `notes.txt` to `backup_notes.txt` and then display the backup contents.",
+        "templateParts": [
+          "Copy with ",
+          { "blank": "b1" },
+          ".\nDisplay with ",
+          { "blank": "b2" },
+          "."
+        ],
+        "answers": {
+          "b1": "cp notes.txt backup_notes.txt",
+          "b2": "cat backup_notes.txt"
+        },
+        "options": [
+          "cp notes.txt backup_notes.txt",
+          "mv notes.txt backup_notes.txt",
+          "cat backup_notes.txt",
+          "ls"
+        ]
+      },
+      {
+        "id": "file_b3",
+        "type": "template-fill",
+        "estimatedTime": "1–2 min",
+        "instruction": "Clean up: rename `backup_notes.txt` to `final_notes.txt` and verify by listing files again.",
+        "templateParts": [
+          "Rename with ",
+          { "blank": "b1" },
+          ".\nVerify with ",
+          { "blank": "b2" },
+          "."
+        ],
+        "answers": {
+          "b1": "mv backup_notes.txt final_notes.txt",
+          "b2": "ls"
+        },
+        "options": [
+          "mv backup_notes.txt final_notes.txt",
+          "cp backup_notes.txt final_notes.txt",
+          "ls",
+          "rm backup_notes.txt"
+        ]
+      },
+      {
+        "id": "file_mo_b1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal.",
+        "options": ["fileA.txt fileB.txt", "Hello, Linux!"],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "ls project/",
+            "output": "",
+            "correctCommand": "fileA.txt fileB.txt"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "echo \"Hello, Linux!\"",
+            "output": "",
+            "correctCommand": "Hello, Linux!"
+          }
+        ]
+      },
+      {
+        "id": "file_mo_b2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal.",
+        "options": ["doc1.txt doc2.txt", "backup1.txt"],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "ls docs/",
+            "output": "",
+            "correctCommand": "doc1.txt doc2.txt"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "ls backup/",
+            "output": "",
+            "correctCommand": "backup1.txt"
+          }
+        ]
+      }
+    ],
+    "Intermediate": [
+      {
+        "id": "file_i1",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Set up your to‑do: create a file named `todo.txt`, write the word “task1” into it, then display its contents.",
+        "templateParts": [
+          "Step 1: create the file with ",
+          { "blank": "b1" },
+          ".\nStep 2: write into it using ",
+          { "blank": "b2" },
+          ".\nStep 3: show the file with ",
+          { "blank": "b3" },
+          "."
+        ],
+        "answers": {
+          "b1": "touch todo.txt",
+          "b2": "echo \"task1\" > todo.txt",
+          "b3": "cat todo.txt"
+        },
+        "options": [
+          "touch todo.txt",
+          "echo \"task1\" > todo.txt",
+          "cat todo.txt",
+          "cp todo.txt backup.txt"
+        ]
+      },
+      {
+        "id": "file_i2",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Gather logs: copy every `.log` file into the `logs/` directory, then list the contents of `logs/`.",
+        "templateParts": [
+          "First, copy with ",
+          { "blank": "b1" },
+          ".\nThen, list with ",
+          { "blank": "b2" },
+          "."
+        ],
+        "answers": {
+          "b1": "cp *.log logs/",
+          "b2": "ls logs/"
+        },
+        "options": [
+          "cp *.log logs/",
+          "mv *.log logs/",
+          "ls logs/",
+          "rm logs/*.log"
+        ]
+      },
+      {
+        "id": "file_i3",
+        "type": "template-fill",
+        "estimatedTime": "2–3 min",
+        "instruction": "Cleanup challenge: remove the entire `temp/` directory and all files inside it in one command.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to delete recursively."
+        ],
+        "answers": { "b1": "rm -r temp/" },
+        "options": [
+          "rm -r temp/",
+          "rmdir temp/",
+          "rm temp/",
+          "rm -f temp/"
+        ]
+      },
+      {
+        "id": "file_mo_i1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal window below.",
+        "options": ["task1", "fileA.log fileB.log"],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "echo \"task1\" > todo.txt && cat todo.txt",
+            "output": "",
+            "correctCommand": "task1"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "ls logs/",
+            "output": "",
+            "correctCommand": "fileA.log fileB.log"
+          }
+        ]
+      },
+      {
+        "id": "file_mo_i2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal window below.",
+        "options": ["data.csv data.bak.csv", "draft.doc final.doc"],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "cp data.csv data.bak.csv && ls backup/",
+            "output": "",
+            "correctCommand": "data.csv data.bak.csv"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "mv draft.doc final.doc && ls",
+            "output": "",
+            "correctCommand": "draft.doc final.doc"
+          }
+        ]
+      }
+    ],
+    "Advanced": [
+      {
+        "id": "file_a1",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Safeguard your config: force‑copy `config.cfg` into `~/backup` even if it already exists.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to overwrite without prompt."
+        ],
+        "answers": { "b1": "cp -f config.cfg ~/backup/" },
+        "options": [
+          "cp -f config.cfg ~/backup/",
+          "cp config.cfg ~/backup/",
+          "mv -f config.cfg ~/backup/",
+          "cp -r config.cfg ~/backup/"
+        ]
+      },
+      {
+        "id": "file_a2",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Archive move: transfer `archive.zip` into `~/archives` and force overwrite.",
+        "templateParts": [
+          "Use ",
+          { "blank": "b1" },
+          " to force the move."
+        ],
+        "answers": { "b1": "mv -f archive.zip ~/archives/" },
+        "options": [
+          "mv -f archive.zip ~/archives/",
+          "mv archive.zip ~/archives/",
+          "cp -f archive.zip ~/archives/",
+          "rm archive.zip"
+        ]
+      },
+      {
+        "id": "file_a3",
+        "type": "template-fill",
+        "estimatedTime": "3–4 min",
+        "instruction": "Session logging: ensure `session.log` exists, then open it for appending (no content).",
+        "templateParts": [
+          "Step 1: ",
+          { "blank": "b1" },
+          "\nStep 2: ",
+          { "blank": "b2" }
+        ],
+        "answers": {
+          "b1": "touch session.log",
+          "b2": "cat >> session.log"
+        },
+        "options": [
+          "touch session.log",
+          "cat >> session.log",
+          "cp session.log session.bak",
+          "mv session.log session.old"
+        ]
+      },
+      {
+        "id": "file_mo_a1",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal window below.",
+        "options": ["/usr/local/bin", "/etc"],
+        "blocks": [
+          {
+            "id": "cmd1",
+            "prompt": "cd /usr/local/bin && pwd",
+            "output": "",
+            "correctCommand": "/usr/local/bin"
+          },
+          {
+            "id": "cmd2",
+            "prompt": "cd /etc && pwd",
+            "output": "",
+            "correctCommand": "/etc"
+          }
+        ]
+      },
+      {
+        "id": "file_mo_a2",
+        "type": "match-output",
+        "title": "Match output to its command",
+        "estimatedTime": "1–2 min",
+        "instruction": "Drag each command’s expected output into the correct terminal window below.",
+        "options": ["report_final.docx", "session.log"],
+        "blocks": [
+          {
+            "id": "cmd3",
+            "prompt": "ls ~/documents/ && head -n 1 ~/documents/report_final.docx",
+            "output": "",
+            "correctCommand": "report_final.docx"
+          },
+          {
+            "id": "cmd4",
+            "prompt": "ls ~/logs/ && tail -n 1 ~/logs/session.log",
+            "output": "",
+            "correctCommand": "session.log"
+          }
+        ]
+      }
+    ]
+  }
+}
