@@ -19,7 +19,7 @@ html {
 
 body {
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   background-color: #ffffff;
 
   background-attachment: fixed;
@@ -28,7 +28,7 @@ body {
 }
 
 header {
-  margin: 2rem 0;
+  margin: 0;
   text-align: center;
 }
 

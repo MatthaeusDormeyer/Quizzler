@@ -3,6 +3,7 @@ import FillInTheBlankQuestion from "./QuizQuestion";
 import MatchOutputQuestion from "./MatchOutputQuestion";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Header from "../Header";
+import Sidebar from "../../components/Sidebar";
 
 function QuizOverview() {
   const { topicId } = useParams();
@@ -18,13 +19,14 @@ function QuizOverview() {
   const searchParams = new URLSearchParams(location.search);
   const level = searchParams.get("level")?.toLowerCase() || "beginner";
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   useEffect(() => {
     fetch(`/quiz-data/${topicId}.json`)
       .then((r) => r.json())
       .then(setQuizData)
       .catch((e) => console.error("Fehler beim Laden des Quiz-Dokuments:", e));
   }, [topicId]);
-  -useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setElapsedSeconds(Math.floor((Date.now() - startTime) / 1000));
     }, 1000);
@@ -118,15 +120,39 @@ function QuizOverview() {
     return <p>❌ No questions found for this level.</p>;
 
   return (
-    <div>
-      <Header />
-      <h1>
-        {quiz.title} {currentIndex + 1} / {questions.length} – ⏱{" "}
-        {formatTime(elapsedSeconds)}
-      </h1>
-      {renderQuestion()}
+    <div style={{ display: "flex" }}>
+      <Sidebar
+        open={sidebarOpen}
+        toggle={() => setSidebarOpen((o) => !o)}
+        onLogout={() => {
+          localStorage.removeItem("token");
+          navigate("/");
+        }}
+        setActiveScreen={() => navigate("/home")}
+      />
+
+      <div style={{ flex: 1 }}>
+        <Header />
+        <main style={{ paddingTop: "150px" }}>
+          <h1 style={S.h2}>
+            {quiz.title} {currentIndex + 1} / {questions.length} – ⏱{" "}
+            {formatTime(elapsedSeconds)}
+          </h1>
+          {renderQuestion()}
+        </main>
+      </div>
     </div>
   );
 }
 
+const S = {
+  h2: {
+    marginTop: 20,
+    marginBottom: 12,
+    textAlign: "left",
+    marginLeft: "50px",
+    fontSize: "40px",
+    fontWeight: "bold",
+  },
+};
 export default QuizOverview;

@@ -142,7 +142,7 @@ const S = {
 
   main: {
     flex: 1,
-    padding: "120px 40px 40px 40px",
+    padding: "0 40px 40px 40px",
     transition: "margin-left .3s ease",
     width: "100%",
   },

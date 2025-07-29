@@ -58,7 +58,7 @@ export default function Sidebar({ open, toggle, onLogout, setActiveScreen }) {
 const styles = {
   burger: {
     position: "fixed",
-    top: "120px",
+    top: "30px",
     zIndex: 2001,
     border: "none",
     fontSize: "1.5rem",
