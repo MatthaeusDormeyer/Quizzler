@@ -5,6 +5,7 @@ const Result = ({
   correctAnswers,
   totalQuestions,
   topicName,
+  topicId,
   onRetry,
   elapsedSeconds,
 }) => {
@@ -106,7 +107,6 @@ const Result = ({
         <div className="result-buttons">
           <button onClick={onRetry}>Try Again</button>
           <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/quiz/2")}>Next</button>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import Sidebar from "../../components/Sidebar";
 
 function QuizOverview() {
   const { topicId } = useParams();
+  const currentTopicId = parseInt(topicId);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -58,7 +59,7 @@ function QuizOverview() {
           correctAnswers,
           totalQuestions,
           topicName: quiz.title || topicId,
-          topicId,
+          topicId: currentTopicId,
           elapsedSeconds,
         },
         replace: true,

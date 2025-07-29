@@ -17,6 +17,7 @@ export default function ResultWrapper() {
       correctAnswers={correctAnswers}
       totalQuestions={totalQuestions}
       topicName={topicName}
+      topicId={topicId}
       onRetry={() => navigate(`/quiz/${topicId}`)}
       elapsedSeconds={elapsedSeconds}
     />
