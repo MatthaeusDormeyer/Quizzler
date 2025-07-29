@@ -40,7 +40,12 @@
           "b1": "ls -la",
           "b2": "/var/www"
         },
-        "options": ["ls -la /var/www", "ls -a /var/www", "ls /var/www", "pwd /var/www"]
+        "options": [
+          "ls -la /var/www",
+          "ls -a /var/www",
+          "ls /var/www",
+          "pwd /var/www"
+        ]
       },
       {
         "id": "nav_b3",
@@ -151,23 +156,14 @@
           "b2": "dirs",
           "b3": "popd"
         },
-        "options": [
-          "pushd /tmp",
-          "dirs",
-          "popd",
-          "cd -"
-        ]
+        "options": ["pushd /tmp", "dirs", "popd", "cd -"]
       },
       {
         "id": "nav_i3",
         "type": "template-fill",
         "estimatedTime": "2–3 min",
         "instruction": "Resolve the absolute path of `../logs/error.log` from your current directory.",
-        "templateParts": [
-          "Enter ",
-          { "blank": "b1" },
-          "."
-        ],
+        "templateParts": ["Enter ", { "blank": "b1" }, "."],
         "answers": {
           "b1": "realpath ../logs/error.log"
         },
@@ -184,10 +180,7 @@
         "title": "Match output to its command",
         "estimatedTime": "1–2 min",
         "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/var/log/syslog.1",
-          "2021-12-01 12:00:00 /var/log/syslog"
-        ],
+        "options": ["/var/log/syslog.1", "2021-12-01 12:00:00 /var/log/syslog"],
         "blocks": [
           {
             "id": "cmd1",
@@ -209,10 +202,7 @@
         "title": "Match output to its command",
         "estimatedTime": "1–2 min",
         "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "scripts run.sh",
-          "/home/bob/scripts/run.sh"
-        ],
+        "options": ["scripts run.sh", "/home/bob/scripts/run.sh"],
         "blocks": [
           {
             "id": "cmd3",
@@ -235,11 +225,7 @@
         "type": "template-fill",
         "estimatedTime": "3–4 min",
         "instruction": "Print the real directory of a symlinked path `/mnt/data/link` resolving all symlinks.",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          "."
-        ],
+        "templateParts": ["Use ", { "blank": "b1" }, "."],
         "answers": {
           "b1": "pwd -P"
         },
@@ -299,10 +285,7 @@
         "title": "Match output to its command",
         "estimatedTime": "1–2 min",
         "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/home/alice/docs",
-          "/mnt/backup"
-        ],
+        "options": ["/home/alice/docs", "/mnt/backup"],
         "blocks": [
           {
             "id": "cmd1",
@@ -324,10 +307,7 @@
         "title": "Match output to its command",
         "estimatedTime": "1–2 min",
         "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/home/alice",
-          "/etc/ssh/sshd_config"
-        ],
+        "options": ["/home/alice", "/etc/ssh/sshd_config"],
         "blocks": [
           {
             "id": "cmd3",

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
+import Header from "./Header";
 
 export default function Home({ user, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -50,6 +51,7 @@ export default function Home({ user, onLogout }) {
 
   return (
     <div style={S.wrapper}>
+      <Header />
       <Sidebar
         open={sidebarOpen}
         toggle={() => setSidebarOpen((o) => !o)}
@@ -60,11 +62,17 @@ export default function Home({ user, onLogout }) {
         setActiveScreen={setActiveScreen}
       />
 
-      <main style={{ ...S.main, marginLeft: sidebarOpen ? 240 : 0 }}>
+      <main
+        style={{
+          ...S.main,
+          marginRight: sidebarOpen ? 240 : 0,
+          paddingTop: "150px",
+        }}
+      >
         {activeScreen === "home" && (
           <>
-            <h2 style={S.h2}>Willkommen, {user?.name}!</h2>
-            <p style={S.lead}>Wähle einen Quiz, um loszulegen</p>
+            <h1 style={S.h2}>Willkommen, {user?.name}!</h1>
+            <h2 style={S.lead}>Wähle einen Quiz, um loszulegen</h2>
 
             <div style={S.grid}>
               {quizzes.map((q) => (
@@ -79,7 +87,7 @@ export default function Home({ user, onLogout }) {
                   )}
 
                   <button style={S.btn} onClick={() => setSelQuiz(q)}>
-                    Quiz wählen
+                    START
                   </button>
                 </div>
               ))}
@@ -123,11 +131,9 @@ export default function Home({ user, onLogout }) {
 
 const S = {
   wrapper: {
-    display: "flex",
     minHeight: "100vh",
     fontFamily: "'Courier Prime', monospace",
   },
-
   stars: {
     margin: "8px 0",
     fontSize: 14,
@@ -136,7 +142,7 @@ const S = {
 
   main: {
     flex: 1,
-    padding: 40,
+    padding: "120px 40px 40px 40px",
     transition: "margin-left .3s ease",
     width: "100%",
   },

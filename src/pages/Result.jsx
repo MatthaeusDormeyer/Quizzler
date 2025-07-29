@@ -53,7 +53,26 @@ const Result = ({
       })
       .then((data) => {
         console.log("✅ Ergebnis gespeichert:", data);
+
+        const key = `stats_${topicName}`;
+        const prev = JSON.parse(localStorage.getItem(key)) || {
+          bestTime: null,
+          attempts: 0,
+          lastAttempt: null,
+        };
+
+        const newStats = {
+          bestTime:
+            prev.bestTime === null || elapsedSeconds < prev.bestTime
+              ? elapsedSeconds
+              : prev.bestTime,
+          attempts: prev.attempts + 1,
+          lastAttempt: new Date().toISOString(),
+        };
+
+        localStorage.setItem(key, JSON.stringify(newStats));
       })
+
       .catch((err) => {
         console.error("Fehler beim Speichern des Ergebnisses:", err);
       });
