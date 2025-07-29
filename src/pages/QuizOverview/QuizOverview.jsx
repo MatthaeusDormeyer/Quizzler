@@ -58,6 +58,7 @@ function QuizOverview() {
           correctAnswers,
           totalQuestions,
           topicName: quiz.title || topicId,
+          topicId,
           elapsedSeconds,
         },
         replace: true,

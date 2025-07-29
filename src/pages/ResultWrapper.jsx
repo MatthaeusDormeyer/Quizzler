@@ -5,7 +5,7 @@ export default function ResultWrapper() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { correctAnswers, totalQuestions, topicName, elapsedSeconds } =
+  const { correctAnswers, totalQuestions, topicName, topicId, elapsedSeconds } =
     location.state || {};
 
   if (!correctAnswers && !totalQuestions) {
@@ -17,7 +17,7 @@ export default function ResultWrapper() {
       correctAnswers={correctAnswers}
       totalQuestions={totalQuestions}
       topicName={topicName}
-      onRetry={() => navigate(-1)}
+      onRetry={() => navigate(`/quiz/${topicId}`)}
       elapsedSeconds={elapsedSeconds}
     />
   );
