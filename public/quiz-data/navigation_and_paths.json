@@ -6,343 +6,305 @@
   "commands": "cd, pwd, ls -la, realpath, basename, dirname, pushd, popd, dirs",
   "questionsByLevel": {
     "Beginner": [
-      {
-        "id": "nav_b1",
-        "type": "template-fill",
-        "estimatedTime": "1–2 min",
-        "instruction": "Enter the `docs` folder from your home directory, then print your current location.",
-        "templateParts": [
-          "Step 1: change to docs with ",
-          { "blank": "b1" },
-          ".\nStep 2: show location with ",
-          { "blank": "b2" },
-          "."
-        ],
-        "answers": {
-          "b1": "cd ~/docs",
-          "b2": "pwd"
-        },
-        "options": ["cd ~/docs", "ls ~/docs", "pwd", "cd /docs"]
-      },
-      {
-        "id": "nav_b2",
-        "type": "template-fill",
-        "estimatedTime": "1–2 min",
-        "instruction": "From `/var/www`, list all files including those starting with a dot.",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          " in ",
-          { "blank": "b2" },
-          "."
-        ],
-        "answers": {
-          "b1": "ls -la",
-          "b2": "/var/www"
-        },
-        "options": ["ls -la /var/www", "ls -a /var/www", "ls /var/www", "pwd /var/www"]
-      },
-      {
-        "id": "nav_b3",
-        "type": "template-fill",
-        "estimatedTime": "1–2 min",
-        "instruction": "Given the path `/usr/local/bin/python3.8`, extract only `python3.8`.",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          " on `/usr/local/bin/python3.8`."
-        ],
-        "answers": {
-          "b1": "basename /usr/local/bin/python3.8"
-        },
-        "options": [
-          "basename /usr/local/bin/python3.8",
-          "dirname /usr/local/bin/python3.8",
-          "realpath /usr/local/bin/python3.8",
-          "ls /usr/local/bin/python3.8"
-        ]
-      },
-      {
-        "id": "nav_mo_b1",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/home/alice/projects/app",
-          "config.json  main.py  README.md"
-        ],
-        "blocks": [
-          {
-            "id": "cmd1",
-            "prompt": "cd ~/projects/app && pwd",
-            "output": "",
-            "correctCommand": "/home/alice/projects/app"
-          },
-          {
-            "id": "cmd2",
-            "prompt": "ls config* main.py README.md",
-            "output": "",
-            "correctCommand": "config.json  main.py  README.md"
-          }
-        ]
-      },
-      {
-        "id": "nav_mo_b2",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/etc/nginx/nginx.conf",
-          "drwxr-xr-x 5 root root 4096 May 10 09:00 ./"
-        ],
-        "blocks": [
-          {
-            "id": "cmd3",
-            "prompt": "realpath /etc/nginx/nginx.conf",
-            "output": "",
-            "correctCommand": "/etc/nginx/nginx.conf"
-          },
-          {
-            "id": "cmd4",
-            "prompt": "ls -la /etc/nginx | head -n 1",
-            "output": "",
-            "correctCommand": "drwxr-xr-x 5 root root 4096 May 10 09:00 ./"
-          }
-        ]
-      }
+  {
+    "id": "nav_b1",
+    "type": "template-fill",
+    "estimatedTime": "1 min",
+    "instruction": "Move into the `documents` folder located in your home directory.",
+    "templateParts": [
+      "Use ",
+      { "blank": "b1" },
+      " to enter the folder."
     ],
-    "Intermediate": [
-      {
-        "id": "nav_i1",
-        "type": "template-fill",
-        "estimatedTime": "2–3 min",
-        "instruction": "Move up two levels from `/home/bob/projects/src` and list only hidden files.",
-        "templateParts": [
-          "Step 1: ascend with ",
-          { "blank": "b1" },
-          ".\nStep 2: list hidden with ",
-          { "blank": "b2" },
-          "."
-        ],
-        "answers": {
-          "b1": "cd ../../",
-          "b2": "ls -d .*"
-        },
-        "options": ["cd ../../", "cd ..", "ls -d .*", "ls -la .*"]
-      },
-      {
-        "id": "nav_i2",
-        "type": "template-fill",
-        "estimatedTime": "2–3 min",
-        "instruction": "Add `/tmp` to your directory stack, show the stack, then return to the original directory.",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          ", then ",
-          { "blank": "b2" },
-          ", then ",
-          { "blank": "b3" },
-          "."
-        ],
-        "answers": {
-          "b1": "pushd /tmp",
-          "b2": "dirs",
-          "b3": "popd"
-        },
-        "options": [
-          "pushd /tmp",
-          "dirs",
-          "popd",
-          "cd -"
-        ]
-      },
-      {
-        "id": "nav_i3",
-        "type": "template-fill",
-        "estimatedTime": "2–3 min",
-        "instruction": "Resolve the absolute path of `../logs/error.log` from your current directory.",
-        "templateParts": [
-          "Enter ",
-          { "blank": "b1" },
-          "."
-        ],
-        "answers": {
-          "b1": "realpath ../logs/error.log"
-        },
-        "options": [
-          "realpath ../logs/error.log",
-          "basename ../logs/error.log",
-          "pwd ../logs/error.log",
-          "ls ../logs/error.log"
-        ]
-      },
-      {
-        "id": "nav_mo_i1",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/var/log/syslog.1",
-          "2021-12-01 12:00:00 /var/log/syslog"
-        ],
-        "blocks": [
-          {
-            "id": "cmd1",
-            "prompt": "realpath /var/log/syslog.1",
-            "output": "",
-            "correctCommand": "/var/log/syslog.1"
-          },
-          {
-            "id": "cmd2",
-            "prompt": "ls -la --time-style=long-iso /var/log/syslog",
-            "output": "",
-            "correctCommand": "2021-12-01 12:00:00 /var/log/syslog"
-          }
-        ]
-      },
-      {
-        "id": "nav_mo_i2",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "scripts run.sh",
-          "/home/bob/scripts/run.sh"
-        ],
-        "blocks": [
-          {
-            "id": "cmd3",
-            "prompt": "ls scripts | grep run.sh",
-            "output": "",
-            "correctCommand": "scripts run.sh"
-          },
-          {
-            "id": "cmd4",
-            "prompt": "realpath scripts/run.sh",
-            "output": "",
-            "correctCommand": "/home/bob/scripts/run.sh"
-          }
-        ]
-      }
+    "answers": {
+      "b1": "cd ~/documents"
+    },
+    "options": ["cd ~/documents", "ls ~/documents", "cd /documents", "pwd"]
+  },
+  {
+    "id": "nav_b2",
+    "type": "template-fill",
+    "estimatedTime": "1 min",
+    "instruction": "Print the path of the current directory.",
+    "templateParts": [
+      "Type ",
+      { "blank": "b1" },
+      " to show the current path."
     ],
-    "Advanced": [
+    "answers": {
+      "b1": "pwd"
+    },
+    "options": ["pwd", "ls", "cd", "echo"]
+  },
+  {
+    "id": "nav_b3",
+    "type": "template-fill",
+    "estimatedTime": "1 min",
+    "instruction": "List files in the current directory.",
+    "templateParts": [
+      "Use ",
+      { "blank": "b1" },
+      " to see the files."
+    ],
+    "answers": {
+      "b1": "ls"
+    },
+    "options": ["ls", "cd", "pwd", "mkdir"]
+  },
       {
-        "id": "nav_a1",
-        "type": "template-fill",
-        "estimatedTime": "3–4 min",
-        "instruction": "Print the real directory of a symlinked path `/mnt/data/link` resolving all symlinks.",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          "."
-        ],
-        "answers": {
-          "b1": "pwd -P"
-        },
-        "options": [
-          "pwd -P",
-          "realpath /mnt/data/link",
-          "pwd",
-          "basename /mnt/data/link"
-        ]
+  "id": "nav_b4",
+  "type": "match-output",
+  "title": "What does the command show?",
+  "estimatedTime": "1 min",
+  "instruction": "Match each command to the correct terminal output.",
+  "options": [
+    "/home/user",
+    "Desktop  Downloads  Pictures"
+  ],
+  "blocks": [
+    {
+      "id": "cmd1",
+      "prompt": "cd ~ && pwd",
+      "output": "",
+      "correctCommand": "/home/user"
+    },
+    {
+      "id": "cmd2",
+      "prompt": "ls ~",
+      "output": "",
+      "correctCommand": "Desktop  Downloads  Pictures"
+    }
+  ]
+},
+{
+  "id": "nav_b5",
+  "type": "match-output",
+  "title": "Which output is correct?",
+  "estimatedTime": "1 min",
+  "instruction": "Drag the correct output to match each command.",
+  "options": [
+    "..  file.txt  images",
+    "/home/user/documents"
+  ],
+  "blocks": [
+    {
+      "id": "cmd3",
+      "prompt": "cd ~/documents && pwd",
+      "output": "",
+      "correctCommand": "/home/user/documents"
+    },
+    {
+      "id": "cmd4",
+      "prompt": "ls",
+      "output": "",
+      "correctCommand": "..  file.txt  images"
+    }
+  ]
+}
+    ],
+"Intermediate": [
+  {
+    "id": "nav_i1",
+    "type": "template-fill",
+    "templateParts": [
+      "Change directory to `/var/log` using ",
+      { "blank": "b1" },
+      ", then list all contents including hidden files using ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "cd /var/log",
+      "b2": "ls -la"
+    },
+    "options": ["cd /var/log", "ls -la", "cd ~", "ls", "pwd", "cd .."]
+  },
+  {
+    "id": "nav_i2",
+    "type": "template-fill",
+    "templateParts": [
+      "You are in `/home/user/projects/app`. Move up two directories using ",
+      { "blank": "b1" },
+      ", then check your current path using ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "cd ../..",
+      "b2": "pwd"
+    },
+    "options": ["cd ..", "cd ../..", "pwd", "ls", "cd /", "cd ."]
+  },
+  {
+    "id": "nav_i3",
+    "type": "template-fill",
+    "templateParts": [
+      "To extract the directory part from `/etc/nginx/nginx.conf`, use ",
+      { "blank": "b1" },
+      ", and to get just the filename, use ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "dirname /etc/nginx/nginx.conf",
+      "b2": "basename /etc/nginx/nginx.conf"
+    },
+    "options": [
+      "dirname /etc/nginx/nginx.conf",
+      "basename /etc/nginx/nginx.conf",
+      "realpath /etc/nginx/nginx.conf",
+      "ls /etc/nginx/nginx.conf",
+      "cd /etc/nginx"
+    ]
+  },
+  {
+    "id": "nav_i4",
+    "type": "match-output",
+    "title": "Match each command with its output",
+    "options": [
+      "/usr/bin/python3.11",
+      "bin  lib  share"
+    ],
+    "blocks": [
+      {
+        "id": "cmd1",
+        "prompt": "realpath /usr/bin/python3.11",
+        "output": "",
+        "correctCommand": "/usr/bin/python3.11"
       },
       {
-        "id": "nav_a2",
-        "type": "template-fill",
-        "estimatedTime": "3–4 min",
-        "instruction": "Change into the parent directory of the running script `$0`, then print its absolute path.",
-        "templateParts": [
-          "Step 1: cd with ",
-          { "blank": "b1" },
-          ".\nStep 2: print with ",
-          { "blank": "b2" },
-          "."
-        ],
-        "answers": {
-          "b1": "cd \"$(dirname \"$0\")\"",
-          "b2": "pwd"
-        },
-        "options": [
-          "cd \\\"$(dirname \\\\\\\"\\\\\\$0\\\\\\\")\\\"",
-          "pwd",
-          "realpath \"$0\"",
-          "basename \"$0\""
-        ]
-      },
-      {
-        "id": "nav_a3",
-        "type": "template-fill",
-        "estimatedTime": "3–4 min",
-        "instruction": "Extract the grandparent directory of `/usr/local/bin/script.sh` (two levels up).",
-        "templateParts": [
-          "Use ",
-          { "blank": "b1" },
-          " on `/usr/local/bin/script.sh`."
-        ],
-        "answers": {
-          "b1": "dirname $(dirname /usr/local/bin/script.sh)"
-        },
-        "options": [
-          "dirname $(dirname /usr/local/bin/script.sh)",
-          "dirname /usr/local/bin/script.sh",
-          "basename /usr/local/bin/script.sh",
-          "realpath /usr/local/bin/script.sh"
-        ]
-      },
-      {
-        "id": "nav_mo_a1",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/home/alice/docs",
-          "/mnt/backup"
-        ],
-        "blocks": [
-          {
-            "id": "cmd1",
-            "prompt": "pushd ~/docs && dirs -v",
-            "output": "",
-            "correctCommand": "/home/alice/docs"
-          },
-          {
-            "id": "cmd2",
-            "prompt": "pushd /mnt/backup && dirs -v",
-            "output": "",
-            "correctCommand": "/mnt/backup"
-          }
-        ]
-      },
-      {
-        "id": "nav_mo_a2",
-        "type": "match-output",
-        "title": "Match output to its command",
-        "estimatedTime": "1–2 min",
-        "instruction": "Drag each command’s output into the correct terminal.",
-        "options": [
-          "/home/alice",
-          "/etc/ssh/sshd_config"
-        ],
-        "blocks": [
-          {
-            "id": "cmd3",
-            "prompt": "cd ~ && pwd",
-            "output": "",
-            "correctCommand": "/home/alice"
-          },
-          {
-            "id": "cmd4",
-            "prompt": "realpath /etc/ssh/sshd_config",
-            "output": "",
-            "correctCommand": "/etc/ssh/sshd_config"
-          }
-        ]
+        "id": "cmd2",
+        "prompt": "ls /usr",
+        "output": "",
+        "correctCommand": "bin  lib  share"
       }
     ]
+  },
+  {
+  "id": "nav_i5",
+  "type": "match-output",
+  "title": "Match each command with its output",
+  "options": [
+    "/home/user/code/utils",
+    "utils\nREADME.md\nmain.py"
+  ],
+  "blocks": [
+    {
+      "id": "cmd5",
+      "prompt": "cd ~/code/utils && pwd",
+      "output": "",
+      "correctCommand": "/home/user/code/utils"
+    },
+    {
+      "id": "cmd6",
+      "prompt": "ls ~/code",
+      "output": "",
+      "correctCommand": "utils\nREADME.md\nmain.py"
+    }
+  ]
+}
+],
+    "Advanced": [
+  {
+    "id": "nav_a1",
+    "type": "template-fill",
+    "templateParts": [
+      "Save the current directory on the stack using ",
+      { "blank": "b1" },
+      ", then move to `/etc/nginx` using ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "pushd .",
+      "b2": "cd /etc/nginx"
+    },
+    "options": ["pushd .", "cd /etc/nginx", "pwd", "ls", "popd", "dirs"]
+  },
+  {
+    "id": "nav_a2",
+    "type": "template-fill",
+    "templateParts": [
+      "You are inside a symlinked folder. Show the actual full path using ",
+      { "blank": "b1" },
+      ". Then print just the current path (without resolving symlinks) using ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "realpath .",
+      "b2": "pwd"
+    },
+    "options": ["realpath .", "pwd", "ls", "readlink", "cd", "basename"]
+  },
+  {
+    "id": "nav_a3",
+    "type": "template-fill",
+    "templateParts": [
+      "From the full path `/srv/www/site/index.html`, extract the parent folder using ",
+      { "blank": "b1" },
+      ", and the filename using ",
+      { "blank": "b2" },
+      "."
+    ],
+    "answers": {
+      "b1": "dirname /srv/www/site/index.html",
+      "b2": "basename /srv/www/site/index.html"
+    },
+    "options": [
+      "dirname /srv/www/site/index.html",
+      "basename /srv/www/site/index.html",
+      "realpath /srv/www/site/index.html",
+      "ls /srv/www/site",
+      "cd /srv/www/site"
+    ]
+  },
+  {
+    "id": "nav_a4",
+    "type": "match-output",
+    "title": "Match each command with its output",
+    "options": [
+      "/home/dev/projects/tools",
+      "/etc\nhome\nsrv\nvar"
+    ],
+    "blocks": [
+      {
+        "id": "cmd7",
+        "prompt": "cd ~/projects/tools && pwd",
+        "output": "",
+        "correctCommand": "/home/dev/projects/tools"
+      },
+      {
+        "id": "cmd8",
+        "prompt": "ls /",
+        "output": "",
+        "correctCommand": "/etc\nhome\nsrv\nvar"
+      }
+    ]
+  },
+  {
+    "id": "nav_a5",
+    "type": "match-output",
+    "title": "Match each command with its output",
+    "options": [
+      "/home/alex\n/etc\n",
+      "/etc\n/home/alex\n"
+    ],
+    "blocks": [
+      {
+        "id": "cmd9",
+        "prompt": "pushd /etc > /dev/null && dirs",
+        "output": "",
+        "correctCommand": "/etc\n/home/alex\n"
+      },
+      {
+        "id": "cmd10",
+        "prompt": "popd > /dev/null && dirs",
+        "output": "",
+        "correctCommand": "/home/alex\n/etc\n"
+      }
+    ]
+  }
+]
   }
 }
