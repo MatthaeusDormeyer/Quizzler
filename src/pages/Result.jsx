@@ -81,11 +81,15 @@ const Result = ({
   }, [stars, topicName, correctAnswers, totalQuestions, elapsedSeconds]);
 
   return (
-    <div>
+    <div className="result-wrapper">
       <Header />
-      <div className="result-page" style={{ paddingTop: "120px" }}>
-        <h1>Well Done, User</h1>
-        <p className="result-line">Quiz: {topicName}</p>
+
+      <div className="result-card">
+        <h1 className="result-title">Quiz is done!</h1>
+
+        <p className="result-line">
+          Quiz: <strong>{topicName}</strong>
+        </p>
         <p className="result-line">
           Score:{" "}
           <span className="stars">
@@ -93,14 +97,11 @@ const Result = ({
             {"☆".repeat(5 - stars)}
           </span>
         </p>
-
         <p className="result-line">Time: {formatTime(elapsedSeconds)}</p>
-
-        <p className="result-line">Difficulty:</p>
-        <p className="result-line">Attempts:</p>
         <p className="result-line">
-          Correct answers: {correctAnswers}/{totalQuestions}
+          Correct Answers: {correctAnswers} / {totalQuestions}
         </p>
+
         <div className="result-buttons">
           <button onClick={onRetry}>Try Again</button>
           <button onClick={() => navigate("/home")}>Home</button>
