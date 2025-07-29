@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header"; // или "../Header"
 
 const Result = ({
   correctAnswers,
@@ -81,12 +82,8 @@ const Result = ({
 
   return (
     <div>
-      <div className="top-bar">
-        <div className="logo">QUIZZLER</div>
-        {/* <div className="user-badge">User</div> */}
-      </div>
-
-      <div className="result-page">
+      <Header />
+      <div className="result-page" style={{ paddingTop: "120px" }}>
         <h1>Well Done, User</h1>
         <p className="result-line">Quiz: {topicName}</p>
         <p className="result-line">
