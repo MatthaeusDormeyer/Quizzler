@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import FillInTheBlankQuestion from "./QuizQuestion";
 import MatchOutputQuestion from "./MatchOutputQuestion";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import Header from "../Header";
+
 function QuizOverview() {
   const { topicId } = useParams();
   const location = useLocation();
@@ -117,6 +119,7 @@ function QuizOverview() {
 
   return (
     <div>
+      <Header />
       <h1>
         {quiz.title} {currentIndex + 1} / {questions.length} – ⏱{" "}
         {formatTime(elapsedSeconds)}

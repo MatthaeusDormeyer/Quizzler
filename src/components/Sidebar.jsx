@@ -8,7 +8,7 @@ export default function Sidebar({ open, toggle, onLogout, setActiveScreen }) {
       <aside
         style={{
           ...styles.sidebar,
-          left: open ? 0 : "-240px",
+          right: open ? 0 : "-240px",
         }}
       >
         <h2 style={styles.logo}>Quizzler</h2>
@@ -45,7 +45,7 @@ export default function Sidebar({ open, toggle, onLogout, setActiveScreen }) {
         onClick={toggle}
         style={{
           ...styles.burger,
-          left: open ? 220 : 20,
+          right: open ? 220 : 20,
           backgroundColor: open ? "#2e7d32" : "#4caf50",
         }}
       >
@@ -58,31 +58,32 @@ export default function Sidebar({ open, toggle, onLogout, setActiveScreen }) {
 const styles = {
   burger: {
     position: "fixed",
-    top: 20,
-    zIndex: 1001,
+    top: "120px",
+    zIndex: 2001,
     border: "none",
     fontSize: "1.5rem",
     padding: "10px 14px",
     color: "#fff",
     borderRadius: 8,
     cursor: "pointer",
-    transition: "left .3s",
+    transition: "right .3s",
   },
 
   sidebar: {
     position: "fixed",
     top: 0,
     bottom: 0,
-    left: 0,
+    right: 0,
     width: 240,
     background: "#2e7d32",
     color: "#fff",
     padding: 20,
-    transition: "left .3s",
+    transition: "right .3s",
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    zIndex: 1000,
+    zIndex: 2000,
+    borderLeft: "3px solid #1b5e20",
   },
 
   logo: {
