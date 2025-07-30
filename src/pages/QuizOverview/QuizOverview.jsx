@@ -59,10 +59,10 @@ function QuizOverview() {
           correctAnswers,
           totalQuestions,
           topicName: quiz.title || topicId,
-          topicId: currentTopicId,
+          topicId,
           elapsedSeconds,
         },
-        replace: true,
+        replace: false,
       });
     }
   }, [
