@@ -1,25 +1,42 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Result from "./Result";
+import Header from "./Header";
+import Sidebar from "../components/Sidebar";
 
 export default function ResultWrapper() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { correctAnswers, totalQuestions, topicName, topicId, elapsedSeconds } =
     location.state || {};
 
-  if (!correctAnswers && !totalQuestions) {
-    return <p>⚠️ Keine Daten gefunden. Bitte Quiz erneut starten.</p>;
-  }
-
   return (
-    <Result
-      correctAnswers={correctAnswers}
-      totalQuestions={totalQuestions}
-      topicName={topicName}
-      topicId={topicId}
-      onRetry={() => navigate(`/quiz/${topicId}`)}
-      elapsedSeconds={elapsedSeconds}
-    />
+    <div style={{ display: "flex" }}>
+      <Sidebar
+        open={sidebarOpen}
+        toggle={() => setSidebarOpen((prev) => !prev)}
+        onLogout={() => {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }}
+        setActiveScreen={() => navigate("/home")}
+      />
+
+      <div style={{ flex: 1 }}>
+        <Header />
+        <main style={{ paddingTop: "150px" }}>
+          <Result
+            correctAnswers={correctAnswers}
+            totalQuestions={totalQuestions}
+            topicName={topicName}
+            topicId={topicId}
+            elapsedSeconds={elapsedSeconds}
+            onRetry={() => navigate(`/quiz/${topicId}`)}
+          />
+        </main>
+      </div>
+    </div>
   );
 }
