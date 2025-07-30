@@ -18,32 +18,25 @@ The app consists of a React frontend and an Express + MongoDB backend, packaged 
 
 1. Clone the repository and navigate to the project root:
    ```bash
-   git clone <repository_url>
-   cd <project_folder>
+   git clone https://github.com/MatthaeusDormeyer/Quizzler.git
+   cd Quizzler
    ```
-2. Install dependencies and build the frontend:
+
+2. Build the Docker image:
 
    ```bash
-   npm install
-   npm run build
+   docker build -t quizzler .
    ```
 
-3. Build the Docker image:
+3. Run the container (replace values with your MongoDB URI and JWT secret):
 
    ```bash
-   docker build -t quizzler-app .
+     docker run -p 8080:3001 \
+     -e MONGO_URI="mongodb+srv://md:1234@quizcluster.epxzuwc.mongodb.net/sample_mflix?retryWrites=true&w=majority" \
+     quizzler
    ```
 
-4. Run the container (replace values with your MongoDB URI and JWT secret):
-
-   ```bash
-   docker run -p 8080:3001 \
-   -e MONGO_URI='mongodb+srv://<user>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority' \
-   -e JWT_SECRET='mein-geheimes-passwort' \
-   quizzler-app
-   ```
-
-5. Open your browser at: http://localhost:8080
+4. Open your browser at: http://localhost:8080
 
 ## Features
 
