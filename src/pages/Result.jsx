@@ -41,7 +41,7 @@ const Result = ({
       badge: "Fast Finisher",
     };
 
-    fetch("http://localhost:3001/save-result", {
+    fetch("/save-result", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

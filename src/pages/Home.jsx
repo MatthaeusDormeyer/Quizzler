@@ -25,22 +25,14 @@ export default function Home({ user, onLogout }) {
 
     // Lade Bestleistungen + vollständigen Verlauf für den Benutzer
     if (user?.email) {
-      fetch(
-        `http://localhost:3001/best-results?email=${encodeURIComponent(
-          user.email
-        )}`
-      )
+      fetch(`/best-results?email=${encodeURIComponent(user.email)}`)
         .then((res) => res.json())
         .then(setBestResults)
         .catch((err) =>
           console.error("Bestleistungen konnten nicht geladen werden:", err)
         );
 
-      fetch(
-        `http://localhost:3001/all-results?email=${encodeURIComponent(
-          user.email
-        )}`
-      )
+      fetch(`/all-results?email=${encodeURIComponent(user.email)}`)
         .then((res) => res.json())
         .then(setUserResults)
         .catch((err) =>

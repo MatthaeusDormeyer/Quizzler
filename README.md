@@ -1,0 +1,66 @@
+# Quizzler — Educational Drag-and-Drop Quiz Application
+
+## Description
+
+Quizzler is an interactive educational web application for learning Linux commands using drag-and-drop quizzes.  
+The app consists of a React frontend and an Express + MongoDB backend, packaged together in a Docker container.
+
+---
+
+## Requirements
+
+- Docker (https://www.docker.com/get-started)
+- Internet connection for MongoDB Atlas access (or a local MongoDB if configured)
+
+---
+
+## How to Build and Run
+
+1. Clone the repository and navigate to the project root:
+   ```bash
+   git clone <repository_url>
+   cd <project_folder>
+   ```
+2. Install dependencies and build the frontend:
+
+   ```bash
+   npm install
+   npm run build
+   ```
+
+3. Build the Docker image:
+
+   ```bash
+   docker build -t quizzler-app .
+   ```
+
+4. Run the container (replace values with your MongoDB URI and JWT secret):
+
+   ```bash
+   docker run -p 8080:3001 \
+   -e MONGO_URI='mongodb+srv://<user>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority' \
+   -e JWT_SECRET='mein-geheimes-passwort' \
+   quizzler-app
+   ```
+
+5. Open your browser at: http://localhost:8080
+
+## Features
+
+- Frontend and API run on the same port (8080)
+- Relative API paths for easy Docker compatibility
+- JWT authentication and MongoDB result storage
+- Interactive drag-and-drop quizzes with real-time feedback
+
+## Project Structure
+
+```bash
+/index.js            # Backend server entrypoint
+/Dockerfile          # Docker build instructions
+/package.json        # Dependencies and scripts
+/src                 # React frontend source code
+/models            # Mongoose models
+/components        # React components
+/pages             # React pages
+/dist                # Built frontend (output of npm run build)
+```

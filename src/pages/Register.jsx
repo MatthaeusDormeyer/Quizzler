@@ -18,7 +18,7 @@ function Register({ onRegister, goLogin }) {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/register", {
+      const res = await fetch("/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

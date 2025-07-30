@@ -2,21 +2,23 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const crypto = require("crypto");
-
 const jwt = require("jsonwebtoken");
-const SECRET = "mein-geheimes-passwort"; // später in .env-Datei auslagern
+const path = require("path");
 
-const Result = require("./models/Result");
+const SECRET = process.env.JWT_SECRET || "fallback-secret";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/test";
 
+const Result = require("./src/models/Result");
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 📌 Раздача фронтенда
+app.use(express.static(path.join(__dirname, "dist")));
+
 // 🔗 MongoDB-Verbindung
 mongoose
-  .connect(
-    "mongodb+srv://md:1234@quizcluster.epxzuwc.mongodb.net/sample_mflix?retryWrites=true&w=majority"
-  )
+  .connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB verbunden"))
   .catch((err) => console.error("❌ MongoDB-Verbindungsfehler:", err));
 
@@ -41,32 +43,25 @@ function hashPassword(password, salt) {
     .digest("hex");
 }
 
-// 📝 Registrierung
+// ✅ Registration
 app.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
+    if (!name || !email || !password)
       return res
         .status(400)
         .json({ message: "Alle Felder sind erforderlich." });
-    }
 
     const existing = await User.findOne({ email });
-    if (existing) {
+    if (existing)
       return res.status(400).json({ message: "User existiert bereits." });
-    }
 
     const salt = generateSalt();
     const passwordHash = hashPassword(password, salt);
-
     const newUser = new User({ name, email, passwordHash, salt });
     await newUser.save();
 
-    // ✅ JWT erstellen
     const token = jwt.sign({ name, email }, SECRET, { expiresIn: "1h" });
-
-    // ✅ zurückgeben
     res.status(201).json({ token });
   } catch (err) {
     console.error("❌ Fehler bei /register:", err);
@@ -74,12 +69,36 @@ app.post("/register", async (req, res) => {
   }
 });
 
+// ✅ Login
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ message: "E-Mail und Passwort erforderlich." });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User nicht gefunden." });
+
+    const passwordHash = hashPassword(password, user.salt);
+    if (passwordHash !== user.passwordHash)
+      return res.status(401).json({ message: "Falsches Passwort." });
+
+    const token = jwt.sign({ name: user.name, email: user.email }, SECRET, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error("❌ Fehler bei /login:", err);
+    res.status(500).json({ message: "Serverfehler bei Login." });
+  }
+});
+
+// ✅ Ergebnisse abrufen
 app.get("/all-results", async (req, res) => {
   const { email } = req.query;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email erforderlich." });
-  }
+  if (!email) return res.status(400).json({ error: "Email erforderlich." });
 
   try {
     const results = await Result.find({ email }).sort({ createdAt: -1 });
@@ -90,66 +109,20 @@ app.get("/all-results", async (req, res) => {
   }
 });
 
-// 🔐 Login
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "E-Mail und Passwort erforderlich." });
-    }
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User nicht gefunden." });
-    }
-
-    const passwordHash = hashPassword(password, user.salt);
-    if (passwordHash !== user.passwordHash) {
-      return res.status(401).json({ message: "Falsches Passwort." });
-    }
-
-    // ✅ JWT erstellen
-    const token = jwt.sign({ name: user.name, email: user.email }, SECRET, {
-      expiresIn: "1h",
-    });
-
-    // ✅ Token senden
-    res.status(200).json({ token });
-  } catch (err) {
-    console.error("❌ Fehler bei /login:", err);
-    res.status(500).json({ message: "Serverfehler bei Login." });
-  }
-});
-
-// Beste Ergebnisse pro Thema für einen User
+// ✅ Beste Ergebnisse pro Thema
 app.get("/best-results", async (req, res) => {
   const { email } = req.query;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email erforderlich." });
-  }
+  if (!email) return res.status(400).json({ error: "Email erforderlich." });
 
   try {
     const bestResults = await Result.aggregate([
       { $match: { email } },
-      { $sort: { stars: -1, createdAt: 1 } }, // beste zuerst
-      {
-        $group: {
-          _id: "$topic",
-          stars: { $first: "$stars" },
-        },
-      },
+      { $sort: { stars: -1, createdAt: 1 } },
+      { $group: { _id: "$topic", stars: { $first: "$stars" } } },
     ]);
 
-    // Als Objekt zurückgeben: { "Navigation and Paths": 3, ... }
     const formatted = {};
-    bestResults.forEach((entry) => {
-      formatted[entry._id] = entry.stars;
-    });
-
+    bestResults.forEach((entry) => (formatted[entry._id] = entry.stars));
     res.json(formatted);
   } catch (err) {
     console.error("❌ Fehler bei /best-results:", err);
@@ -157,9 +130,7 @@ app.get("/best-results", async (req, res) => {
   }
 });
 
-
-
-//Save Results
+// ✅ Ergebnisse speichern
 app.post("/save-result", async (req, res) => {
   const {
     email,
@@ -170,12 +141,10 @@ app.post("/save-result", async (req, res) => {
     elapsedSeconds,
     badge,
   } = req.body;
-
-  if (!email || !topic) {
+  if (!email || !topic)
     return res
       .status(400)
       .json({ error: "Email und Thema sind erforderlich." });
-  }
 
   try {
     const result = new Result({
@@ -187,9 +156,7 @@ app.post("/save-result", async (req, res) => {
       elapsedSeconds,
       badge,
     });
-
     await result.save();
-
     res.status(200).json({ success: true, saved: result });
   } catch (err) {
     console.error("❌ Fehler beim Speichern:", err);
@@ -198,6 +165,11 @@ app.post("/save-result", async (req, res) => {
 });
 
 // 🚀 Server starten
-app.listen(3001, () => {
-  console.log("🚀 Backend läuft auf http://localhost:3001");
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Backend läuft auf http://localhost:${PORT}`);
+});
+
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
